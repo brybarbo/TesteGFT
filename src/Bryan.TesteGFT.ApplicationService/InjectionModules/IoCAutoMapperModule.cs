@@ -8,14 +8,8 @@ namespace Bryan.TesteGFT.ApplicationService.InjectionModules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.Register(
-                    context => new MapperConfiguration(cfg => { cfg.AddProfile(new DomainToViewModelMapping()); }))
-                .AsSelf().SingleInstance();
-
-            builder.Register(
-                    c => c.Resolve<MapperConfiguration>().CreateMapper(c.Resolve))
-                .As<IMapper>()
-                .InstancePerLifetimeScope();
+            builder.Register(context => new MapperConfiguration(cfg => { cfg.AddProfile(new DomainToViewModelMapping()); })).AsSelf().SingleInstance();
+            builder.Register(c => c.Resolve<MapperConfiguration>().CreateMapper(c.Resolve)).As<IMapper>().InstancePerLifetimeScope();
         }
     }
 }

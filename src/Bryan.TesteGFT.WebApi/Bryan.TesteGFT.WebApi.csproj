@@ -29,8 +29,6 @@
   
   <ItemGroup>
     <ProjectReference Include="..\Bryan.TesteGFT.ApplicationService\Bryan.TesteGFT.ApplicationService.csproj" />
-    <ProjectReference Include="..\Bryan.TesteGFT.DbEFCore\Bryan.TesteGFT.DbEFCore.csproj" />
-    <ProjectReference Include="..\Bryan.TesteGFT.Infrastructure\Bryan.TesteGFT.Infrastructure.csproj" />
   </ItemGroup> 
   
  </Project>

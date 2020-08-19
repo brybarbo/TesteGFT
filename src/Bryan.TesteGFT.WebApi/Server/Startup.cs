@@ -1,28 +1,17 @@
-﻿using Api.Common.Core.Authentication;
-using Api.Common.WebServer.Server;
+﻿using Api.Common.WebServer.Server;
 using Bryan.TesteGFT.ApplicationService.InjectionModules;
-using Bryan.TesteGFT.Domain.InjectionModules;
 using Autofac;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Serilog;
 using Swashbuckle.AspNetCore.Swagger;
-using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Threading.Tasks;
-using Bryan.TesteGFT.DbEFCore.Repositories;
-using Bryan.TesteGFT.Infrastructure.InjectionModules;
 
 namespace Bryan.TesteGFT.WebApi.Server
 {
@@ -55,9 +44,7 @@ namespace Bryan.TesteGFT.WebApi.Server
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            // IoC Container Module Registration
             builder.RegisterModule(new IoCModuleApplicationService());
-            builder.RegisterModule(new IoCModuleInfrastructure());
             builder.RegisterModule(new IoCAutoMapperModule());
         }
 
@@ -73,27 +60,10 @@ namespace Bryan.TesteGFT.WebApi.Server
                     opt.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
                 });
 
-            var connectionStringApp = Configuration.GetConnectionString("ApiDbConnection");
-            services.AddDbContext<EfCoreDbContext>(options => { options.UseSqlServer(connectionStringApp); });
-
             //Config Swagger
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "Bryan.TesteGFT.WebApi", Version = "v1" });
-
-                c.AddSecurityDefinition("Bearer",
-                    new ApiKeyScheme
-                    {
-                        In = "header",
-                        Description = "Please insert JWT with Bearer into field",
-                        Name = "Authorization",
-                        Type = "apiKey"
-                    });
-
-                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
-                {
-                    { "Bearer", new string[] { } }
-                });
             });
 
             services.AddCors(config =>
@@ -104,48 +74,6 @@ namespace Bryan.TesteGFT.WebApi.Server
                 policy.Origins.Add("*");
                 policy.SupportsCredentials = true;
                 config.AddPolicy("policy", policy);
-            });
-
-            var signingConfigurations = new SigningConfigurations();
-            services.AddSingleton(signingConfigurations);
-
-            var tokenConfigurations = new TokenConfigurations();
-            services.AddSingleton(tokenConfigurations);
-
-            services.AddAuthentication(
-                authOptions =>
-                {
-                    authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                }).AddJwtBearer("Bearer", options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidAudience = tokenConfigurations.Audience,
-                        ValidIssuer = tokenConfigurations.Issuer,
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = signingConfigurations.Key,
-                        ValidateLifetime = true,
-                        ClockSkew = TimeSpan.Zero
-                    };
-                    options.Events = new JwtBearerEvents
-                    {
-                        OnAuthenticationFailed = context =>
-                        {
-                            if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
-                            {
-                                context.Response.Headers.Add("Token-Expired", "true");
-                            }
-                            return Task.CompletedTask;
-                        }
-                    };
-                });
-
-            services.AddAuthorization(auth =>
-            {
-                auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
-                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-                    .RequireAuthenticatedUser().Build());
             });
 
             services.AddMemoryCache();

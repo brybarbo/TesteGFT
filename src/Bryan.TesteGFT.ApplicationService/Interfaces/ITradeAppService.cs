@@ -1,5 +1,5 @@
-﻿using Api.Common.Repository.Contracts.Core.Entities;
-using Bryan.TesteGFT.ApplicationService.ViewModels;
+﻿using Bryan.TesteGFT.ApplicationService.ViewModels;
+using Bryan.TesteGFT.Domain;
 using System.Collections.Generic;
 
 namespace Bryan.TesteGFT.ApplicationService.Interfaces

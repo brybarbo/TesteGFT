@@ -9,13 +9,10 @@ namespace Bryan.TesteGFT.CI.WebApi.Controllers
 {
     public class HealthCheckController : BaseController
     {
-        private readonly ITradeAppService appService;
         private readonly ILogger<HealthCheckController> logger;
 
-        public HealthCheckController(ITradeAppService appService,
-            ILogger<HealthCheckController> logger)
+        public HealthCheckController(ILogger<HealthCheckController> logger)
         {
-            this.appService = appService;
             this.logger = logger;
         }
 
