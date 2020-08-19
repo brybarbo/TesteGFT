@@ -1,4 +1,6 @@
-﻿namespace Bryan.TesteGFT.ApplicationService.ViewModels
+﻿using Bryan.TesteGFT.Domain.Models;
+
+namespace Bryan.TesteGFT.ApplicationService.ViewModels
 {
     public class TradeCategoryViewModel
     {
@@ -11,14 +13,8 @@
 
         public string GetCategory(double valor, string clientSector)
         {
-            if (valor <= 1000000 && clientSector.ToUpper() == "PUBLIC")
-                return "LOWRISK";
-            else if (valor > 1000000 && clientSector.ToUpper() == "PUBLIC")
-                return "MEDIUMRISK";
-            else if (valor > 1000000 && clientSector.ToUpper() == "PRIVATE")
-                return "HIGHRISK";
-
-            return string.Empty;
+            var risk = RiskFactory.GetRiskDefination(valor, clientSector);
+            return risk.GetRisk();
         }
     }
 }

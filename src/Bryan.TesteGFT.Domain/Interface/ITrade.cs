@@ -1,4 +1,4 @@
-﻿namespace Bryan.TesteGFT.Domain
+﻿namespace Bryan.TesteGFT.Domain.Interface
 {
     public interface ITrade
     {

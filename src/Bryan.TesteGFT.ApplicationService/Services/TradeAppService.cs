@@ -1,6 +1,6 @@
 ﻿using Bryan.TesteGFT.ApplicationService.Interfaces;
 using Bryan.TesteGFT.ApplicationService.ViewModels;
-using Bryan.TesteGFT.Domain;
+using Bryan.TesteGFT.Domain.Interface;
 using System.Collections.Generic;
 using System.Linq;
 

@@ -1,17 +1,16 @@
-﻿namespace Bryan.TesteGFT.Domain.Models
+﻿using Bryan.TesteGFT.Domain.Interface;
+
+namespace Bryan.TesteGFT.Domain.Models
 {
     public class Trade : ITrade
     {
         public Trade(double valor, string clientSector)
         {
-          _value  = valor;
-         _clientSector = clientSector;
+            Value = valor;
+            ClientSector = clientSector;
         }
-        private double _value;
-        private string _clientSector;
 
-
-        public double Value => _value;
-        public string ClientSector => _clientSector;
+        public double Value { get; }
+        public string ClientSector { get; }
     }
 }
