@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
+  </PropertyGroup>  
+
+  <ItemGroup>   
+    <PackageReference Include="Autofac" Version="4.9.4" />
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+  </ItemGroup>  
+
+  <ItemGroup>
+    <ProjectReference Include="..\Api.Common.WebServer\Api.Common.WebServer.csproj" />
+    <ProjectReference Include="..\Bryan.TesteGFT.Domain\Bryan.TesteGFT.Domain.csproj" />
+  </ItemGroup>
+</Project>
